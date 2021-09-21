@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发布订阅</title>
+</head>
+
+<body>
+  <button onclick="history.go(-1)">返回</button>
+  <script src="./index.js"></script>
+  <script>
+    /* 先发布后订阅 */
+    Event.trigger('click', 1);
+    Event.listen('click', function (a) {
+      console.log(a)
+    })
+    /* --------------------------------------------------------------- */
+    /* 使用命名空间 */
+    Event.create('namespace1').listen('click', function (a) {
+      console.log(a)
+    })
+    Event.create('namespace1').trigger('click', '1');
+    Event.create('namespace2').listen('click', function (a) {
+      console.log(a)
+    })
+    Event.create('namespace2').trigger('click', '2');
+    /* --------------------------------------------------------------- */
+    /* 取消指定监听 */
+    const fn = (a) => console.log(a);
+    Event.listen('aaa', (a) => console.log(a));
+    Event.listen('aaa', fn);
+    Event.remove('aaa', fn);
+    Event.trigger('aaa', 44444)
+    /* --------------------------------------------------------------- */
+    /* 取消所有监听 */
+    Event.listen('aaa', (a) => console.log(a));
+    Event.listen('aaa', fn);
+    Event.remove('aaa');
+    Event.trigger('aaa', 55555)
+  </script>
+</body>
+
+</html>
