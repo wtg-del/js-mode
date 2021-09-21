@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>策略模式</title>
+</head>
+
+<body>
+  <button onclick="history.go(-1)">返回</button>
+  <div id="div" style="position: absolute;background: blue;color: white;">我是div</div>
+  <form id="registerForm" method="post" style="margin-top: 30px;">
+     请输入用户名: <input type="text" name="userName"><br />
+     请输入密码: <input type="text" name="password"><br />
+     请输入手机号码: <input type="text" name="phoneNumber"><br />
+    <button>提交</button>
+  </form>
+
+  <script src="./Animate.js"></script>
+  <script>
+    const animate = new Animate(document.getElementById('div'));
+    animate.start('left', 500, 1000, 'strongEaseOut');
+  </script>
+
+
+  <script src="./Validator.js"></script>
+  <script>
+    const registerForm = document.getElementById('registerForm');
+    const validataFunc = () => {
+      const validator = new Validator();
+      validator.add(registerForm.userName, [
+        { strategy: 'isNonEmpty', errorMsg: '用户名不能为空' },
+        { strategy: 'minLength:6', errorMsg: '用户名长度不能小于10位' },
+      ]);
+      validator.add(registerForm.password, [
+        { strategy: 'minLength:6', errorMsg: '密码长度不能小于6位' },
+      ]);
+      validator.add(registerForm.phoneNumber, [
+        { strategy: 'isMobile', errorMsg: '手机号码格式不正确' },
+      ]);
+      return validator.start();
+    };
+    registerForm.onsubmit = (e) => {
+      e.preventDefault();
+      const errorMsg = validataFunc();
+      if (errorMsg) {
+        alert(errorMsg);
+        return false;
+      }
+      alert('校验通过')
+    }
+  </script>
+</body>
+
+</html>
